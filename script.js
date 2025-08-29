@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     } else {
-      // Disable buttons on desktop
       detailButtons.forEach(button => {
         button.disabled = true;
         button.style.opacity = "0.5";
@@ -68,26 +67,29 @@ document.addEventListener('DOMContentLoaded', () => {
         button.title = "Available only on mobile";
       });
     }
-//   }
+  }
 
-//   // ===== ABOUT MODAL (optional) =====
-//   const aboutModal = document.getElementById('aboutModal');
-//   const moreInfoBtn = document.getElementById('moreInfoBtn');
-//   const aboutCloseBtn = aboutModal?.querySelector('.cars-close-btn');
+  // ===== ABOUT MODAL (Optional) =====
+  // Uncomment this section if you're using a modal for "More Info" in about.html
 
-//   if (aboutModal && moreInfoBtn && aboutCloseBtn) {
-//     moreInfoBtn.addEventListener('click', () => {
-//       aboutModal.style.display = 'block';
-//     });
+  // const aboutModal = document.getElementById('aboutModal');
+  // const moreInfoBtn = document.getElementById('moreInfoBtn');
+  // const aboutCloseBtn = aboutModal?.querySelector('.cars-close-btn');
 
-//     aboutCloseBtn.addEventListener('click', () => {
-//       aboutModal.style.display = 'none';
-//     });
+  // if (aboutModal && moreInfoBtn && aboutCloseBtn) {
+  //   moreInfoBtn.addEventListener('click', () => {
+  //     aboutModal.style.display = 'block';
+  //   });
 
-//     window.addEventListener('click', (event) => {
-//       if (event.target === aboutModal) {
-//         aboutModal.style.display = 'none';
-//       }
-//     });
-//   }
-// });
+  //   aboutCloseBtn.addEventListener('click', () => {
+  //     aboutModal.style.display = 'none';
+  //   });
+
+  //   window.addEventListener('click', (event) => {
+  //     if (event.target === aboutModal) {
+  //       aboutModal.style.display = 'none';
+  //     }
+  //   });
+  // }
+
+});
