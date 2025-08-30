@@ -16,26 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== IMAGE POPUP =====
-  const carImages = document.querySelectorAll('.highlighted-cars .car img');
-  carImages.forEach(img => {
-    img.addEventListener('click', () => {
-      const overlay = document.createElement('div');
-      overlay.classList.add('image-popup-overlay');
-
-      const fullImage = document.createElement('img');
-      fullImage.src = img.src;
-      fullImage.classList.add('image-popup-full');
-
-      overlay.appendChild(fullImage);
-      document.body.appendChild(overlay);
-
-      overlay.addEventListener('click', () => {
-        overlay.remove();
-      });
-    });
-  });
-
   // ===== VIEW DETAILS (Mobile only) =====
   const isMobile = window.matchMedia("(max-width: 600px)").matches;
   const carsModal = document.getElementById('carsModal');
@@ -69,27 +49,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ===== ABOUT MODAL (Optional) =====
-  // Uncomment this section if you're using a modal for "More Info" in about.html
+  // ===== Fetch and display cars dynamically =====
+  fetch('https://car-backend-4zsn.onrender.com/cars')  // Fetch cars from the Flask backend
+    .then(response => response.json())  // Convert response to JSON
+    .then(data => {
+      const container = document.querySelector('.highlighted-cars');
+      container.innerHTML = '';  // Clear existing cars
 
-  // const aboutModal = document.getElementById('aboutModal');
-  // const moreInfoBtn = document.getElementById('moreInfoBtn');
-  // const aboutCloseBtn = aboutModal?.querySelector('.cars-close-btn');
+      // Loop through the fetched cars and display each one
+      data.forEach(car => {
+        const carDiv = document.createElement('div');
+        carDiv.classList.add('car');
 
-  // if (aboutModal && moreInfoBtn && aboutCloseBtn) {
-  //   moreInfoBtn.addEventListener('click', () => {
-  //     aboutModal.style.display = 'block';
-  //   });
+        carDiv.innerHTML = `
+          <img src="${car.image}" alt="${car.name}">
+          <p class="description">${car.name}</p>
+          <p class="price">₱${car.price}</p>
+        `;
 
-  //   aboutCloseBtn.addEventListener('click', () => {
-  //     aboutModal.style.display = 'none';
-  //   });
+        container.appendChild(carDiv);
+      });
 
-  //   window.addEventListener('click', (event) => {
-  //     if (event.target === aboutModal) {
-  //       aboutModal.style.display = 'none';
-  //     }
-  //   });
-  // }
+      // ===== IMAGE POPUP =====
+      // Add popup listeners AFTER the images are added dynamically
+      const carImages = document.querySelectorAll('.highlighted-cars .car img');
+      carImages.forEach(img => {
+        img.addEventListener('click', () => {
+          const overlay = document.createElement('div');
+          overlay.classList.add('image-popup-overlay');
 
+          const fullImage = document.createElement('img');
+          fullImage.src = img.src;
+          fullImage.classList.add('image-popup-full');
+
+          overlay.appendChild(fullImage);
+          document.body.appendChild(overlay);
+
+          overlay.addEventListener('click', () => {
+            overlay.remove();
+          });
+        });
+      });
+    })
+    .catch(error => console.error('Error fetching cars:', error));  // Handle any errors
 });
