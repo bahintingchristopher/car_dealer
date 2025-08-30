@@ -79,8 +79,10 @@
 
     <!-- ✅ Place JavaScript at the bottom -->
 <script>
-  // Fetch cars from your Flask backend deployed on Render
-fetch("https://car-backend-4zsn.onrender.com/cars")  // 👈 put your real Render URL here
+  // Your Render backend URL
+  const BACKEND_URL = "https://car-backend-4zsn.onrender.com";
+
+  fetch(`${BACKEND_URL}/cars`)
     .then(response => response.json())
     .then(data => {
       const container = document.getElementById("cars-container");
@@ -90,10 +92,9 @@ fetch("https://car-backend-4zsn.onrender.com/cars")  // 👈 put your real Rende
         const carCard = document.createElement("div");
         carCard.classList.add("car-card");
         carCard.innerHTML = `
-          <img src="${car.image}" alt="${car.name}" width="250">
+          <img src="${BACKEND_URL}${car.image}" alt="${car.name}" width="250">
           <h3>${car.name}</h3>
           <p>Price: ${car.price}</p>
-          <p>${car.details}</p>
         `;
         container.appendChild(carCard);
       });
