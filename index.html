@@ -82,28 +82,25 @@
 const BACKEND_URL = "https://car-backend-4zsn.onrender.com";
 
 fetch(`${BACKEND_URL}/cars`)
-  .then(response => response.json())
-  .then(data => {
-    const container = document.getElementById("cars-container");
-    container.innerHTML = "";
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById("cars-container");
+    container.innerHTML = "";
 
-    data.forEach(car => {
-      const encodedImageURL = encodeURI(car.image);  // <--- Encode URL here!
+    data.forEach(car => {
+      const carDiv = document.createElement("div");
+      carDiv.classList.add("car");
 
-      const carDiv = document.createElement("div");
-      carDiv.classList.add("car");
+      carDiv.innerHTML = `
+        <img src="${car.image_url}" alt="${car.name}" width="250">
+        <h3>${car.name}</h3>
+        <p>Price: ${car.price}</p>
+      `;
 
-      carDiv.innerHTML = `
-        <img src="${encodedImageURL}" alt="${car.name}" width="250">
-        <h3>${car.name}</h3>
-        <p>Price: ${car.price}</p>
-      `;
-
-      container.appendChild(carDiv);
-    });
-  })
-  .catch(err => console.error("Error fetching cars:", err));
+      container.appendChild(carDiv);
+    });
+  })
+  .catch(err => console.error("Error fetching cars:", err));
 </script>
-
 </body>
 </html>
