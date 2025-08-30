@@ -50,19 +50,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===== Fetch and display cars dynamically =====
-  fetch('https://car-backend-4zsn.onrender.com/cars')  // Fetch cars from the Flask backend
-    .then(response => response.json())  // Convert response to JSON
+  fetch('https://car-backend-4zsn.onrender.com/cars')
+    .then(response => response.json())
     .then(data => {
       const container = document.querySelector('.highlighted-cars');
       container.innerHTML = '';  // Clear existing cars
 
-      // Loop through the fetched cars and display each one
       data.forEach(car => {
         const carDiv = document.createElement('div');
         carDiv.classList.add('car');
 
         carDiv.innerHTML = `
-          <img src="${car.image}" alt="${car.name}">
+          <img src="${encodeURI(car.image)}" alt="${car.name}">
           <p class="description">${car.name}</p>
           <p class="price">₱${car.price}</p>
         `;
@@ -70,26 +69,51 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(carDiv);
       });
 
-      // ===== IMAGE POPUP =====
-      // Add popup listeners AFTER the images are added dynamically
-      const carImages = document.querySelectorAll('.highlighted-cars .car img');
-      carImages.forEach(img => {
-        img.addEventListener('click', () => {
-          const overlay = document.createElement('div');
-          overlay.classList.add('image-popup-overlay');
-
-          const fullImage = document.createElement('img');
-          fullImage.src = img.src;
-          fullImage.classList.add('image-popup-full');
-
-          overlay.appendChild(fullImage);
-          document.body.appendChild(overlay);
-
-          overlay.addEventListener('click', () => {
-            overlay.remove();
-          });
-        });
-      });
+      // NO longer add click listeners here for images
+      // Popup will be handled by event delegation below
     })
-    .catch(error => console.error('Error fetching cars:', error));  // Handle any errors
+    .catch(error => console.error('Error fetching cars:', error));
+
+  // ===== IMAGE POPUP using event delegation on container =====
+  const container = document.getElementById("cars-container");
+  if (container) {
+    container.addEventListener("click", (event) => {
+      const clicked = event.target;
+      if (clicked.tagName === "IMG" && clicked.closest(".car")) {
+        const overlay = document.createElement('div');
+        overlay.classList.add('image-popup-overlay');
+
+        // Styling the overlay
+        Object.assign(overlay.style, {
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "rgba(0,0,0,0.8)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          cursor: "pointer",
+          zIndex: 1000,
+        });
+
+        const fullImage = document.createElement('img');
+        fullImage.src = clicked.src;
+        Object.assign(fullImage.style, {
+          maxWidth: "90%",
+          maxHeight: "90%",
+          borderRadius: "10px",
+          boxShadow: "0 0 15px white",
+        });
+
+        overlay.appendChild(fullImage);
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener('click', () => {
+          overlay.remove();
+        });
+      }
+    });
+  }
 });
