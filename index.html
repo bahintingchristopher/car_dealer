@@ -8,17 +8,17 @@
 </head>
 <body>
     <div class="logo">
-    <img src="images/W.png" alt="W">
+        <img src="images/W.png" alt="W">
     </div>
     <div class="company_name">
-    <h1>Bahins AutoCars</h1>
+        <h1>Bahins AutoCars</h1>
     </div>
 
-        <div class="menu_button">
-            <button>
+    <div class="menu_button">
+        <button>
             <img src="images/menu_button.jpg" alt="menu_button">
-            </button>
-        </div>
+        </button>
+    </div>
 
     <nav class="navbar">
       <a href="index.html">Home</a>
@@ -27,102 +27,80 @@
       <a href="contact.html">Contact</a>
     </nav>
 
-<div class="hero">
-    <h2>Find the Perfect Car for Your Lifestyle and Budget</h2>
-    <img src="images/hero_display_center.jpg" alt="">
-    <video 
-    src="images/hero_video.mp4" 
-    controls 
-    preload="auto"
-    style="width: 100%; max-height: 300px; object-fit: cover;">
-    Your browser does not support the video tag.
-  </video>
-  
-  <video 
-    src="images/hero_video2.mp4" 
-    controls 
-    preload="auto"
-    style="width: 100%;  object-fit: cover;">
-    Your browser does not support the video tag.
-  </video>
-
-
-</div>
-
-<script src="script.js"></script>
-
-
-<div class="highlighted">
- <h2>Hot Picks Under Your Budget</h2>
- </div>
-
-<section class="highlighted-cars">
-
-  <div class="car">
-    <img src="images/car1.jpg" alt="Car 1">
-    <p class="description">2024 Honda Civic</p>
-    <p class="price">₱1,150,000</p>
-  </div>
-
-  <div class="car">
-    <img src="images/car2.jpg" alt="Car 2">
-    <p class="description">2023 Toyota Vios</p>
-    <p class="price">₱870,000</p>
-  </div>
-
-  <div class="car">
-    <img src="images/car3.jpg" alt="Car 3">
-    <p class="description">2022 Mitsubishi Mirage</p>
-    <p class="price">₱690,000</p>
-  </div>
-
-  <div class="car">
-    <img src="images/car4.jpg" alt="Car 4">
-    <p class="description">2025 Nissan Almera</p>
-    <p class="price">₱950,000</p>
-  </div>
-</section>
-
-
-
-
-
-
-    
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-<footer class="footer">
-  <div class="footer-content">
-    
-    <div class="nav_links">
-      <h3>Quick Links</h3>
-      <a href="index.html">Home</a>
-      <a href="car.html">Cars For Sale</a>
-      <a href="about.html">About Us</a>
-      <a href="contact.html">Contact</a>
+    <div class="hero">
+        <h2>Find the Perfect Car for Your Lifestyle and Budget</h2>
+        <img src="images/hero_display_center.jpg" alt="">
+        <video 
+            src="images/hero_video.mp4" 
+            controls 
+            preload="auto"
+            style="width: 100%; max-height: 300px; object-fit: cover;">
+            Your browser does not support the video tag.
+        </video>
+      
+        <video 
+            src="images/hero_video2.mp4" 
+            controls 
+            preload="auto"
+            style="width: 100%;  object-fit: cover;">
+            Your browser does not support the video tag.
+        </video>
     </div>
 
-    <p>&copy; 2025 | Bahins Web & Software Solutions</p>
-
-    <div class="social-icons">
-      <a href="#"><img src="images/fb_icon.jpg" alt="Facebook Icon" /></a>
-      <a href="#"><img src="images/linkedin_icon.png" alt="LinkedIn Icon" /></a>
-      <a href="#"><img src="images/wattsapp_icon.png" alt="WhatsApp Icon" /></a>
+    <div class="highlighted">
+        <h2>Hot Picks Under Your Budget</h2>
     </div>
 
-  </div>
-</footer>
+    <!-- Car listings (dynamic) -->
+    <section class="highlighted-cars" id="cars-container">
+        <!-- Cars will load here dynamically -->
+    </section>
+
+    <footer class="footer">
+      <div class="footer-content">
+        
+        <div class="nav_links">
+          <h3>Quick Links</h3>
+          <a href="index.html">Home</a>
+          <a href="car.html">Cars For Sale</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+
+        <p>&copy; 2025 | Bahins Web & Software Solutions</p>
+
+        <div class="social-icons">
+          <a href="#"><img src="images/fb_icon.jpg" alt="Facebook Icon" /></a>
+          <a href="#"><img src="images/linkedin_icon.png" alt="LinkedIn Icon" /></a>
+          <a href="#"><img src="images/wattsapp_icon.png" alt="WhatsApp Icon" /></a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ✅ Place JavaScript at the bottom -->
+<script>
+  // Fetch cars from your Flask backend deployed on Render
+  fetch("https://car-backend.onrender.com/cars") // 👈 put your real Render URL here
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById("cars-container");
+      container.innerHTML = "";
+
+      data.forEach(car => {
+        const carCard = document.createElement("div");
+        carCard.classList.add("car-card");
+        carCard.innerHTML = `
+          <img src="${car.image}" alt="${car.name}" width="250">
+          <h3>${car.name}</h3>
+          <p>Price: ${car.price}</p>
+          <p>${car.details}</p>
+        `;
+        container.appendChild(carCard);
+      });
+    })
+    .catch(err => {
+      console.error("Error fetching cars:", err);
+    });
+</script>
+</body>
+</html>
